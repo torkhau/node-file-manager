@@ -1,6 +1,7 @@
+
 export class FileManagerError extends Error {
-  constructor(message) {
-    super(message);
+  constructor(message, name = 'FileManagerError') {
+    super(message, name);
   }
 
   static get EMPTY_ARGS() {
@@ -8,4 +9,10 @@ export class FileManagerError extends Error {
       'Please run CLI with command "npm run start -- --username=your_username".\nWhere "your_username" is the username you want to use.'
     );
   }
+
+  static get INVALID_INPUT() {
+    return new FileManagerError('Invalid input');
+  }
 }
+
+new Error('hello', 123)

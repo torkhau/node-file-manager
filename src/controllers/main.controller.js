@@ -1,12 +1,11 @@
-import { getOSInfo } from '../services/os.js';
-import { nwd } from '../services/nwd.js';
+import { FileManagerError } from '../utils/index.js';
+import { handleNWDCommand } from './nwd.controller.js';
+import { handleOSCommand } from './os.controller.js';
 
 const commandMap = {
-  nwd,
   files: '',
-  os: getOSInfo,
   hash: '',
-  archiv: '', 
+  archiv: '',
 };
 
 export async function handleCommand(command) {
@@ -19,7 +18,7 @@ export async function handleCommand(command) {
     case 'up':
     case 'cd':
     case 'ls':
-      await commandMap['nwd'](normalizedCommand, args);
+      await handleNWDCommand(normalizedCommand, args);
       break;
     case 'cat':
     case 'add':
@@ -31,7 +30,7 @@ export async function handleCommand(command) {
       commandMap['files'](args);
       break;
     case 'os':
-      commandMap['os'](args);
+      handleOSCommand(args);
       break;
     case 'hash':
       commandMap['hash'](args);
@@ -41,6 +40,6 @@ export async function handleCommand(command) {
       commandMap['archiv'](args);
       break;
     default:
-      console.log(`Invalid input`);
+      throw FileManagerError.INVALID_INPUT;
   }
 }

@@ -1,8 +1,8 @@
 import { homedir } from 'node:os';
 import { chdir, cwd, stdin as input, stdout as output } from 'node:process';
 import { Interface } from 'node:readline';
-import { handleCommand } from './controllers/command.controller.js';
-import { FileManagerError } from './utils/errors.js';
+import { handleCommand } from './controllers/main.controller.js';
+import { FileManagerError } from './utils/index.js';
 
 export class ComandLineInterface extends Interface {
   #username = 'anonymous';
@@ -17,7 +17,16 @@ export class ComandLineInterface extends Interface {
         this.#exit();
       }
 
-      await handleCommand(command);
+      try {
+        await handleCommand(command);
+      } catch (error) {
+        if (error instanceof FileManagerError) {
+          console.error(error.message);
+        } else {
+          console.error('Some critical error happened!', error);
+        }
+      }
+
       this.#updatePrompt();
     });
     this.on('SIGINT', () => this.#exit());
