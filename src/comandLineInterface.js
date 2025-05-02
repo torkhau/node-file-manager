@@ -18,7 +18,7 @@ export class ComandLineInterface extends Interface {
       }
 
       await handleCommand(command);
-      this.prompt();
+      this.#updatePrompt();
     });
     this.on('SIGINT', () => this.#exit());
   }
@@ -42,7 +42,6 @@ export class ComandLineInterface extends Interface {
 
     chdir(homedir());
     this.#updatePrompt();
-    this.prompt();
   }
 
   #exit() {
@@ -52,5 +51,6 @@ export class ComandLineInterface extends Interface {
 
   #updatePrompt() {
     this.setPrompt(`You are currently in ${cwd()} |--> `);
+    this.prompt();
   }
 }

@@ -1,7 +1,8 @@
 import { getOSInfo } from '../services/os.js';
+import { nwd } from '../services/nwd.js';
 
 const commandMap = {
-  nwd: '',
+  nwd,
   files: '',
   os: getOSInfo,
   hash: '',
@@ -11,14 +12,14 @@ const commandMap = {
 export async function handleCommand(command) {
   if (command.length === 0) return;
 
-  const [cmd, ...args] = command.split(' ');
-  const cmdIndex = cmd.trim().toLowerCase();
+  const [cmd, ...args] = command.split(/\s+/);
+  const normalizedCommand = cmd.trim().toLowerCase();
 
-  switch (cmdIndex) {
+  switch (normalizedCommand) {
     case 'up':
     case 'cd':
     case 'ls':
-      commandMap['nwd'](args);
+      await commandMap['nwd'](normalizedCommand, args);
       break;
     case 'cat':
     case 'add':
