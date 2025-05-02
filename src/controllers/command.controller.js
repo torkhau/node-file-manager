@@ -1,7 +1,9 @@
 import { getOSInfo } from '../services/os.js';
 
 const commandMap = {
-  'os': getOSInfo,
+  nwd: '',
+
+  os: getOSInfo,
 };
 
 export async function handleCommand(command) {
@@ -10,9 +12,16 @@ export async function handleCommand(command) {
   const [cmd, ...args] = command.split(' ');
   const cmdIndex = cmd.trim().toLowerCase();
 
-  if (commandMap[cmdIndex]) {
-    commandMap[cmdIndex](args);
-  } else {
-    console.log(`Invalid input`);
+  switch (cmdIndex) {
+    case 'up':
+    case 'cd':
+    case 'ls':
+      commandMap['nwd'](args);
+      break;
+    case 'os':
+      commandMap['os'](args);
+      break;
+    default:
+      console.log(`Invalid input`);
   }
 }
