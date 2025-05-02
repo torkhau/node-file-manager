@@ -10,7 +10,7 @@ const paramMap = {
 
 export function getOSInfo(param) {
   if (param.length === 0) {
-    console.log(`Invalid input.`);
+    console.log(`Invalid input`);
     return;
   }
 
@@ -19,6 +19,6 @@ export function getOSInfo(param) {
   if (typeof paramMap[normalizedParam] === 'function') {
     paramMap[normalizedParam]();
   } else {
-    console.log(`Invalid input.`);
+    console.log(`Invalid input`);
   }
 }

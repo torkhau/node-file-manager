@@ -1,7 +1,8 @@
-import { cwd, stdin as input, stdout as output } from 'node:process';
+import { homedir } from 'node:os';
+import { chdir, cwd, stdin as input, stdout as output } from 'node:process';
 import { Interface } from 'node:readline';
-import { FileManagerError } from './utils/errors.js';
 import { handleCommand } from './controllers/command.controller.js';
+import { FileManagerError } from './utils/errors.js';
 
 export class ComandLineInterface extends Interface {
   #username = 'anonymous';
@@ -14,7 +15,7 @@ export class ComandLineInterface extends Interface {
 
       if (command === '.exit') {
         this.#exit();
-      } 
+      }
 
       await handleCommand(command);
       this.prompt();
@@ -38,6 +39,8 @@ export class ComandLineInterface extends Interface {
     } else console.warn('!!!Username not provided, using default username "anonymous"!!!\n');
 
     console.info(`Welcome to the File Manager, ${this.username}!\n`);
+
+    chdir(homedir());
     this.#updatePrompt();
     this.prompt();
   }
@@ -48,6 +51,6 @@ export class ComandLineInterface extends Interface {
   }
 
   #updatePrompt() {
-    this.setPrompt(`${cwd()} |--> `);
+    this.setPrompt(`You are currently in ${cwd()} |--> `);
   }
 }
