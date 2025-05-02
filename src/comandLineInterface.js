@@ -1,6 +1,7 @@
 import { cwd, stdin as input, stdout as output } from 'node:process';
 import { Interface } from 'node:readline';
 import { FileManagerError } from './utils/errors.js';
+import { handleCommand } from './controllers/command.controller.js';
 
 export class ComandLineInterface extends Interface {
   #username = 'anonymous';
@@ -8,15 +9,15 @@ export class ComandLineInterface extends Interface {
   constructor() {
     super({ input, output });
     this.#start();
-    this.on('line', (line) => {
+    this.on('line', async (line) => {
       const command = line.trim();
 
       if (command === '.exit') {
         this.#exit();
-      } else {
-        console.log(`You entered: ${line}`);
-        this.prompt();
-      }
+      } 
+
+      await handleCommand(command);
+      this.prompt();
     });
     this.on('SIGINT', () => this.#exit());
   }
