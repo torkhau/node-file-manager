@@ -1,23 +1,14 @@
-import { isAbsolute, resolve } from 'node:path';
-import { cwd } from 'node:process';
 import { nwd } from '../services/nwd.service.js';
-import { FileManagerError, targetType } from '../utils/index.js';
+import { FileManagerError, normalizePath, targetType } from '../utils/index.js';
 
 export const handleNWDCommand = async (command, args) => {
   if (command === 'cd') {
-    if (!args[0]) throw FileManagerError.INVALID_INPUT;
-
-    let normalizedParh = args[0].trim();
-
-    if (!normalizedParh) throw FileManagerError.INVALID_INPUT;
-
-    if (!isAbsolute(normalizedParh)) normalizedParh = resolve(cwd(), normalizedParh);
-
-    const type = await targetType(normalizedParh);
+    const path = normalizePath(args[0]);
+    const type = await targetType(path);
 
     if (type !== 'directory') throw FileManagerError.INVALID_INPUT;
 
-    args = [normalizedParh];
+    args = [path];
   }
 
   const result = await nwd(command, args);
