@@ -2,13 +2,13 @@ import { compress, decompress } from '../services/archiver.service.js';
 import { FileManagerError, normalizePath, targetType } from '../utils/index.js';
 
 export const handleArchiverCommand = async (command, args) => {
-  const pathFile = normalizePath(args[0]);
-  const pathDestination = normalizePath(args[1]);
-  const type = await targetType(pathFile);
+  const source = normalizePath(args[0]);
+  const destination = normalizePath(args[1]);
+  const type = await targetType(source);
 
   if (type !== 'file') throw FileManagerError.INVALID_INPUT;
 
-  args = [pathFile, pathDestination];
+  args = [source, destination];
   if (command === 'compress') {
     await compress(args);
   } else await decompress(args);

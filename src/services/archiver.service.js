@@ -3,17 +3,17 @@ import { pipeline } from 'stream/promises';
 import { createBrotliCompress, createBrotliDecompress } from 'zlib';
 import { FileManagerError } from '../utils/index.js';
 
-export async function compress([pathFile, pathDestination]) {
+export async function compress([source, destination]) {
   try {
-    await pipeline(createReadStream(pathFile), createBrotliCompress(), createWriteStream(pathDestination));
+    await pipeline(createReadStream(source), createBrotliCompress(), createWriteStream(destination));
   } catch {
     throw FileManagerError.OPERATION_FAILED;
   }
 }
 
-export async function decompress([pathFile, pathDestination]) {
+export async function decompress([source, destination]) {
   try {
-    await pipeline(createReadStream(pathFile), createBrotliDecompress(), createWriteStream(pathDestination));
+    await pipeline(createReadStream(source), createBrotliDecompress(), createWriteStream(destination));
   } catch {
     throw FileManagerError.OPERATION_FAILED;
   }
