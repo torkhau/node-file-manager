@@ -1,10 +1,10 @@
 import { FileManagerError } from '../utils/index.js';
+import { handleHashCommand } from './hash.controller.js';
 import { handleNWDCommand } from './nwd.controller.js';
 import { handleOSCommand } from './os.controller.js';
 
 const commandMap = {
   files: '',
-  hash: '',
   archiv: '',
 };
 
@@ -33,7 +33,7 @@ export async function handleCommand(command) {
       handleOSCommand(args);
       break;
     case 'hash':
-      commandMap['hash'](args);
+      await handleHashCommand(args);
       break;
     case 'compress':
     case 'decompress':

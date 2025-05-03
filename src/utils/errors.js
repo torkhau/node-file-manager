@@ -1,4 +1,3 @@
-
 export class FileManagerError extends Error {
   constructor(message, name = 'FileManagerError') {
     super(message, name);
@@ -13,6 +12,8 @@ export class FileManagerError extends Error {
   static get INVALID_INPUT() {
     return new FileManagerError('Invalid input');
   }
-}
 
-new Error('hello', 123)
+  static get OPERATION_FAILED() {
+    return new FileManagerError('Operation failed');
+  }
+}
