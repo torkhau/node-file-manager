@@ -1,17 +1,18 @@
 import { FileManagerError } from '../utils/index.js';
+import { handleArchiverCommand } from './archiver.controller.js';
 import { handleHashCommand } from './hash.controller.js';
 import { handleNWDCommand } from './nwd.controller.js';
 import { handleOSCommand } from './os.controller.js';
 
 const commandMap = {
   files: '',
-  archiv: '',
 };
 
 export async function handleCommand(command) {
   if (command.length === 0) return;
 
-  const [cmd, ...args] = command.split(/\s+/);
+  const match = command.match(/(?:[^\s"]+|"[^"]*")+/g);
+  const [cmd, ...args] = match.map((arg) => arg.replace(/^"|"$/g, ''));
   const normalizedCommand = cmd.trim().toLowerCase();
 
   switch (normalizedCommand) {
@@ -37,7 +38,7 @@ export async function handleCommand(command) {
       break;
     case 'compress':
     case 'decompress':
-      commandMap['archiv'](args);
+      await handleArchiverCommand(normalizedCommand, args);
       break;
     default:
       throw FileManagerError.INVALID_INPUT;
