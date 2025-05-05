@@ -7,11 +7,9 @@ export async function hash([path]) {
   const hash = createHash('sha256');
 
   try {
-    const writableStream = async (source) => {
+    await pipeline(createReadStream(path), async (source) => {
       for await (const chunk of source) hash.update(chunk);
-    };
-
-    await pipeline(createReadStream(path), writableStream);
+    });
   } catch {
     throw FileManagerError.OPERATION_FAILED;
   }

@@ -13,6 +13,7 @@ export const handleArchiverCommand = async (command, args) => {
   if (destinationType !== 'directory') throw FileManagerError.INVALID_INPUT;
 
   args = [source, destination];
+  
   if (command === 'compress') {
     await compress(args);
   } else await decompress(args);

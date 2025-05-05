@@ -6,10 +6,11 @@ import { FileManagerError } from '../utils/index.js';
 
 export async function compress([source, destination]) {
   try {
-    const fileName = basename(source);
-    destination = join(destination, `${fileName}.br`);
-
-    await pipeline(createReadStream(source), createBrotliCompress(), createWriteStream(destination));
+    await pipeline(
+      createReadStream(source),
+      createBrotliCompress(),
+      createWriteStream(join(destination, `${basename(source)}.br`))
+    );
   } catch {
     throw FileManagerError.OPERATION_FAILED;
   }
@@ -17,10 +18,11 @@ export async function compress([source, destination]) {
 
 export async function decompress([source, destination]) {
   try {
-    const fileName = basename(source, '.br');
-    destination = join(destination, fileName);
-
-    await pipeline(createReadStream(source), createBrotliDecompress(), createWriteStream(destination));
+    await pipeline(
+      createReadStream(source),
+      createBrotliDecompress(),
+      createWriteStream(join(destination, basename(source, '.br')))
+    );
   } catch {
     throw FileManagerError.OPERATION_FAILED;
   }

@@ -13,6 +13,10 @@ export class FileManagerError extends Error {
     return new FileManagerError('Invalid input');
   }
 
+  static get FILE_NOT_FOUND() {
+    return new FileManagerError('File not found');
+  }
+
   static get OPERATION_FAILED() {
     return new FileManagerError('Operation failed');
   }

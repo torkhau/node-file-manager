@@ -1,6 +1,6 @@
 import { createReadStream, createWriteStream } from 'node:fs';
 import { mkdir, open, rename, rm } from 'node:fs/promises';
-import { basename, join } from 'node:path';
+import { basename, dirname, extname, join } from 'node:path';
 import { pipeline } from 'node:stream/promises';
 import { FileManagerError } from '../utils/index.js';
 
@@ -8,9 +8,7 @@ const FileCommandMap = {
   cat: async ([path]) => {
     try {
       await pipeline(createReadStream(path, 'utf8'), async (source) => {
-        for await (const chunk of source) {
-          process.stdout.write(chunk.toString());
-        }
+        for await (const chunk of source) process.stdout.write(chunk.toString());
       });
     } catch {
       throw FileManagerError.OPERATION_FAILED;
@@ -37,19 +35,16 @@ const FileCommandMap = {
       throw FileManagerError.OPERATION_FAILED;
     }
   },
-  rn: async ([oldPath, newPath]) => {
+  rn: async ([oldPath, newName]) => {
     try {
-      await rename(oldPath, newPath);
+      await rename(oldPath, join(dirname(oldPath), `${newName}${extname(oldPath)}`));
     } catch {
       throw FileManagerError.OPERATION_FAILED;
     }
   },
   cp: async ([source, destination]) => {
     try {
-      const fileName = basename(source);
-      destination = join(destination, fileName);
-
-      await pipeline(createReadStream(source), createWriteStream(destination));
+      await pipeline(createReadStream(source), createWriteStream(join(destination, basename(source))));
     } catch {
       throw FileManagerError.OPERATION_FAILED;
     }
