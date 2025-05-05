@@ -3,10 +3,14 @@ import { FileManagerError, normalizePath, targetType } from '../utils/index.js';
 
 export const handleArchiverCommand = async (command, args) => {
   const source = normalizePath(args[0]);
-  const destination = normalizePath(args[1]);
-  const type = await targetType(source);
+  const sourceType = await targetType(source);
 
-  if (type !== 'file') throw FileManagerError.INVALID_INPUT;
+  if (sourceType !== 'file') throw FileManagerError.INVALID_INPUT;
+
+  const destination = normalizePath(args[1]);
+  const destinationType = await targetType(destination);
+
+  if (destinationType !== 'directory') throw FileManagerError.INVALID_INPUT;
 
   args = [source, destination];
   if (command === 'compress') {
