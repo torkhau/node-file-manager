@@ -44,7 +44,7 @@ export const handleFileCommand = async (command, args) => {
       second = normalizePath(second);
       const secondType = await targetType(second);
 
-      if (secondType !== 'directory') throw new FileManagerError('Destination directory not found');
+      if (secondType !== 'directory') throw FileManagerError.DIR_NOT_FOUND;
 
       args = [first, second];
       break;

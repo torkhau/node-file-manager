@@ -3,6 +3,10 @@ export class FileManagerError extends Error {
     super(message, name);
   }
 
+  static get DIR_NOT_FOUND() {
+    return new FileManagerError('Destination directory not found');
+  }
+
   static get EMPTY_ARGS() {
     return new FileManagerError(
       'Please run CLI with command "npm run start -- --username=your_username".\nWhere "your_username" is the username you want to use.'
